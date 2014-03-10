@@ -14,21 +14,21 @@
 ;;
 ;; Hint: vec, map, keyword, first
 (defn table-keys [tbl]
-  :ImplementMe!)
+  (vec (map keyword (first tbl))))
 
 ;; (key-value-pairs [:id :surname :year :group_id] ["1" "Ivanov" "1996"])
 ;; => (:id "1" :surname "Ivanov" :year "1996")
 ;;
 ;; Hint: flatten, map, list
 (defn key-value-pairs [tbl-keys tbl-record]
-  :ImplementMe!)
+  (interleave tbl-keys tbl-record))
 
 ;; (data-record [:id :surname :year :group_id] ["1" "Ivanov" "1996"])
 ;; => {:surname "Ivanov", :year "1996", :id "1"}
 ;;
 ;; Hint: apply, hash-map, key-value-pairs
 (defn data-record [tbl-keys tbl-record]
-  :ImplementMe!)
+  (apply hash-map (key-value-pairs tbl-keys tbl-record)))
 
 ;; (data-table student-tbl)
 ;; => ({:surname "Ivanov", :year "1996", :id "1"}
@@ -37,14 +37,17 @@
 ;;
 ;; Hint: let, map, next, table-keys, data-record
 (defn data-table [tbl]
-  :ImplementMe!)
+  (let [header     (table-keys tbl)
+        table-data (next tbl)]
+    (map #(data-record header %) table-data)))
 
 ;; (str-field-to-int :id {:surname "Ivanov", :year "1996", :id "1"})
 ;; => {:surname "Ivanov", :year "1996", :id 1}
 ;;
 ;; Hint: assoc, Integer/parseInt, get
 (defn str-field-to-int [field rec]
-  :ImplementMe!)
+  (let [field-val (parse-int (get rec field))]
+    (assoc rec field field-val)))
 
 (def student (->> (data-table student-tbl)
                   (map #(str-field-to-int :id %))
@@ -63,14 +66,14 @@
 ;;
 ;; Hint: if-not, filter
 (defn where* [data condition-func]
-  :ImplementMe!)
+  (filter condition-func data))
 
 ;; (limit* student 1)
 ;; => ({:surname "Ivanov", :year 1998, :id 1})
 ;;
 ;; Hint: if-not, take
 (defn limit* [data lim]
-  :ImplementMe!)
+  (take lim data))
 
 ;; (order-by* student :year)
 ;; => ({:surname "Sidorov", :year 1996, :id 3} {:surname "Petrov", :year 1997, :id 2} {:surname "Ivanov", :year 1998, :id 1})
